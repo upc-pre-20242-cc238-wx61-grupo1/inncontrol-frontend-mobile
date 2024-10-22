@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/task.dart';  // Import the Task model
+import '../../models/task.dart';  // Importar el modelo Task
 
 class AddTaskScreen extends StatefulWidget {
-  final Function(Task) onAddTask;  // Change to Task type
+  final Function(Task) onAddTask;  // Función que recibirá la nueva tarea
 
   AddTaskScreen({required this.onAddTask});
 
@@ -99,21 +99,20 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
 
-                        // Create new Task object
+                        // Crear nueva tarea
                         Task newTask = Task(
                           title: _taskTitle ?? 'No Title',
                           dueDate: _dueDate != null
                               ? '${_dueDate!.day}/${_dueDate!.month}/${_dueDate!.year}'
                               : 'No Date',
-                          assignedEmployee:
-                          _assignedEmployee ?? 'No Employee',
+                          assignedEmployee: _assignedEmployee ?? 'No Employee',
                           status: _status ?? 'No Status',
                         );
 
-                        // Call the function to add the task
-                        widget.onAddTask(newTask);
+                        // Llamar a la función para agregar la tarea
+                        widget.onAddTask(newTask);  // Aquí se añade la nueva tarea
 
-                        // Go back to the previous screen
+                        // Volver a la pantalla anterior
                         Navigator.pop(context);
                       }
                     },

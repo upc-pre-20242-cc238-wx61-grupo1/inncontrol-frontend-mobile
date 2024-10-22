@@ -9,7 +9,7 @@ class TaskListScreen extends StatefulWidget {
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
-  // Replace List<Map<String, String>> with List<Task>
+  // Lista de tareas
   List<Task> tasks = [
     Task(
       title: 'Lorem 1',
@@ -25,7 +25,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     ),
   ];
 
-  // Replace _addTask with a Task type parameter
+  // Función para añadir una nueva tarea
   void _addTask(Task newTask) {
     setState(() {
       tasks.add(newTask);
@@ -41,13 +41,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
           IconButton(
             icon: Icon(Icons.filter_alt_outlined),
             onPressed: () {
-              // Add filtering logic here
+              // Aquí puedes agregar lógica de filtrado si es necesario
             },
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // Navegar a la pantalla para añadir una nueva tarea
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -61,7 +62,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         padding: EdgeInsets.all(16.0),
         children: tasks.map((task) {
           return TaskItem(
-            task: task,  // Pass the Task object directly
+            task: task,  // Pasar el objeto Task al widget TaskItem
           );
         }).toList(),
       ),
