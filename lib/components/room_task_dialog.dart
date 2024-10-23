@@ -4,13 +4,13 @@ import '../models/room.dart';  // Import the room model
 class RoomTaskDialog extends StatefulWidget {
   final Room room;
 
-  const RoomTaskDialog({Key? key, required this.room}) : super(key: key);
+  const RoomTaskDialog({super.key, required this.room});
 
   @override
-  _RoomTaskDialogState createState() => _RoomTaskDialogState();
+  RoomTaskDialogState createState() => RoomTaskDialogState();
 }
 
-class _RoomTaskDialogState extends State<RoomTaskDialog> {
+class RoomTaskDialogState extends State<RoomTaskDialog> {
   String taskStatus = 'Done';
 
   @override
@@ -21,27 +21,27 @@ class _RoomTaskDialogState extends State<RoomTaskDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            TextField(
-              decoration: const InputDecoration(
+            const TextField(
+              decoration: InputDecoration(
                 labelText: "Task Description",
                 hintText: "Describe the task",
               ),
             ),
-            Row(
+            const Row(
               children: [
                 Expanded(
                   child: TextField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Date",
                       hintText: "dd/mm/yyyy",
                     ),
                     keyboardType: TextInputType.datetime,
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: TextField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Time",
                       hintText: "hh:mm",
                     ),
@@ -67,8 +67,8 @@ class _RoomTaskDialogState extends State<RoomTaskDialog> {
               },
             ),
             const SizedBox(height: 8),
-            TextField(
-              decoration: const InputDecoration(
+            const TextField(
+              decoration: InputDecoration(
                 labelText: "Assigned To",
                 hintText: "Enter staff name",
               ),
@@ -89,7 +89,7 @@ class _RoomTaskDialogState extends State<RoomTaskDialog> {
             // Show task assigned message
             showDialog(
               context: context,
-              builder: (context) => TaskAssignedDialog(),
+              builder: (context) => const TaskAssignedDialog(),
             );
           },
         ),
@@ -99,6 +99,8 @@ class _RoomTaskDialogState extends State<RoomTaskDialog> {
 }
 
 class TaskAssignedDialog extends StatelessWidget {
+  const TaskAssignedDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

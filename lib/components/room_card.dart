@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../models/room.dart';
-import 'room_form.dart';  // Import the room model
+import 'room_form.dart';
 
 class RoomCard extends StatelessWidget {
   final Room room;
+  final Function(Room) onRoomUpdated;  // Callback to update room data
 
-  const RoomCard({Key? key, required this.room}) : super(key: key);
+  const RoomCard({super.key, required this.room, required this.onRoomUpdated});
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +39,17 @@ class RoomCard extends StatelessWidget {
           ),
           trailing: IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () {
+            onPressed: () async {
               // Open the dialog for editing the room
-              showDialog(
+              final updatedRoom = await showDialog<Room>(
                 context: context,
-                builder: (context) => EditRoomDialog(room: room),
+                builder: (context) => RoomFormDialog(room: room),  // Pass the room to the form
               );
+
+              // If the room was updated, call the callback
+              if (updatedRoom != null) {
+                onRoomUpdated(updatedRoom);
+              }
             },
           ),
         ),
