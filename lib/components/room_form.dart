@@ -1,255 +1,139 @@
 import 'package:flutter/material.dart';
 import '../models/room.dart';
-import 'room_task_dialog.dart';  // Import the room model
 
-class AddRoomDialog extends StatefulWidget {
+class RoomFormDialog extends StatefulWidget {
+  final Room? room;  // Optional room for editing
+
+  const RoomFormDialog({super.key, this.room});
+
   @override
-  _AddRoomDialogState createState() => _AddRoomDialogState();
+  RoomFormDialogState createState() => RoomFormDialogState();
 }
 
-class _AddRoomDialogState extends State<AddRoomDialog> {
-  String roomType = 'Standard';
-  String roomStatus = 'Vacant';
+class RoomFormDialogState extends State<RoomFormDialog> {
+  final _formKey = GlobalKey<FormState>();
+  String? _roomNumber;
+  String? _roomType = 'Standard';  // Default room type
+  String? _roomStatus = 'Vacant';  // Default room status
+  String? _guests = 'None';
+  String? _upcomingReservations = 'None';
 
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Add a new room"),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextField(
-              decoration: const InputDecoration(
-                labelText: "Room Number",
-                hintText: "104",
-              ),
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: "Guest Name",
-                suffixIcon: Icon(Icons.add),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      labelText: "Reservation",
-                      hintText: "dd/mm/yyyy",
-                    ),
-                    keyboardType: TextInputType.datetime,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      labelText: "Due Time",
-                      hintText: "hh:mm",
-                    ),
-                    keyboardType: TextInputType.datetime,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: "Type"),
-                    value: roomType,
-                    items: ['Standard', 'Suite'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        roomType = newValue!;
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: "Status"),
-                    value: roomStatus,
-                    items: ['Vacant', 'Occupied', 'In Service'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        roomStatus = newValue!;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      labelText: "Checkout",
-                      hintText: "dd/mm/yyyy",
-                    ),
-                    keyboardType: TextInputType.datetime,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      labelText: "Due Time",
-                      hintText: "hh:mm",
-                    ),
-                    keyboardType: TextInputType.datetime,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: const Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: const Text("Add"),
-          onPressed: () {
-            // Aquí puedes manejar la lógica para añadir la habitación
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
+  void initState() {
+    super.initState();
+
+    // If a room is passed for editing, pre-fill the fields
+    if (widget.room != null) {
+      _roomNumber = widget.room!.number;
+      _roomType = widget.room!.type;
+      _roomStatus = widget.room!.status;
+      _guests = widget.room!.guests;
+      _upcomingReservations = widget.room!.upcomingReservations;
+    } else {
+      // Default values for adding a new room
+      _roomType = 'Standard';
+      _roomStatus = 'Vacant';
+      _guests = 'None';
+      _upcomingReservations = 'None';
+    }
   }
-}
-
-class EditRoomDialog extends StatelessWidget {
-  final Room room;
-
-  const EditRoomDialog({Key? key, required this.room}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Room ${room.number}"),
+      title: Text(widget.room == null ? 'Add a New Room' : 'Edit Room ${_roomNumber}'),
       content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextField(
-              controller: TextEditingController(text: room.number),
-              decoration: const InputDecoration(labelText: "Room Number"),
-            ),
-            TextField(
-              controller: TextEditingController(text: room.guests),
-              decoration: const InputDecoration(labelText: "Guest Name"),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      labelText: "Reservation",
-                      hintText: "dd/mm/yyyy",
-                    ),
-                    keyboardType: TextInputType.datetime,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      labelText: "Due Time",
-                      hintText: "hh:mm",
-                    ),
-                    keyboardType: TextInputType.datetime,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: "Type"),
-                    value: room.type,
-                    items: ['Standard', 'Suite'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      // Cambiar el tipo de habitación
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: "Status"),
-                    value: room.status,
-                    items: ['Vacant', 'Occupied', 'In Service'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      // Cambiar el estado de la habitación
-                    },
-                  ),
-                ),
-              ],
-            ),
-            if (room.status == 'Vacant')
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    // Abre la ventana emergente para agregar una nueva tarea
-                    showDialog(
-                      context: context,
-                      builder: (context) => RoomTaskDialog(room: room),
-                    );
-                  },
-                  child: const Text("Add New Task"),
-                ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                initialValue: _roomNumber,
+                decoration: const InputDecoration(labelText: 'Room Number'),
+                onSaved: (value) {
+                  print('El valor actual de _roomNumber es: $value');
+                  _roomNumber = value;
+                },
+                validator: (value) {
+                  return value == null || value.isEmpty
+                      ? 'Please enter a room number'
+                      : null;
+                },
               ),
-          ],
+              TextFormField(
+                initialValue: _guests,
+                decoration: const InputDecoration(labelText: 'Guests'),
+                onSaved: (value) {
+                  _guests = value ?? 'None';
+                },
+              ),
+              TextFormField(
+                initialValue: _upcomingReservations,
+                decoration: const InputDecoration(labelText: 'Upcoming Reservations'),
+                onSaved: (value) {
+                  _upcomingReservations = value ?? 'None';
+                },
+              ),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(labelText: 'Room Type'),
+                value: _roomType,
+                items: ['Standard', 'Suite'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    _roomType = newValue;
+                  });
+                },
+              ),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(labelText: 'Room Status'),
+                value: _roomStatus,
+                items: ['Vacant', 'Occupied', 'In Service'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    _roomStatus = newValue;
+                  });
+                },
+              ),
+            ],
+          ),
         ),
       ),
-      actions: <Widget>[
+      actions: [
         TextButton(
-          child: const Text("Cancel"),
+          child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: const Text("Edit"),
+          child: Text(widget.room == null ? 'Add' : 'Update'),
           onPressed: () {
-            // Aquí puedes manejar la lógica de edición
-            Navigator.of(context).pop();
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+
+              // Create or update a Room object
+              final updatedRoom = Room(
+                number: _roomNumber!,
+                type: _roomType!,
+                status: _roomStatus!,
+                guests: _guests!,
+                upcomingReservations: _upcomingReservations!,
+              );
+
+              // Return the room data to the main screen
+              Navigator.of(context).pop(updatedRoom);
+            }
           },
         ),
       ],
