@@ -142,18 +142,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tasks'),
-        backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.filter_alt_outlined),
-            onPressed: () {
-              // Aquí puedes agregar lógica de filtrado si es necesario
-            },
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navegar a la pantalla para añadir una nueva tarea
@@ -164,47 +152,87 @@ class _TaskListScreenState extends State<TaskListScreen> {
             ),
           );
         },
-        child: Icon(Icons.add),
+        backgroundColor: const Color(0xff1D455E),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(16.0),
-        children: tasks.map((task) {
-          return ListTile(
-            title: Text(task.title),
-            subtitle: Text('${task.dueDate} | ${task.status}'),
-            trailing: PopupMenuButton<String>(
-              onSelected: (value) {
-                if (value == 'edit') {
-                  _editTask(task); // Mostrar cuadro de diálogo para editar
-                } else if (value == 'delete') {
-                  _confirmDeleteTask(
-                      task); // Mostrar cuadro de diálogo antes de eliminar
-                }
-              },
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                    value: 'edit',
-                    child: Text('Editar'),
-                  ),
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: Text('Eliminar'),
-                  ),
-                ];
-              },
-            ),
-            onTap: () {
-              // Navegar a la pantalla de detalles de la tarea
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TaskDetailsScreen(task: task),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Row(
+              children: [
+                const Text(
+                  'Tasks',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 34,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 4,
+                          color: Colors.black26,
+                          offset: Offset(0, 4),
+                        )
+                      ]),
                 ),
-              );
-            },
-          );
-        }).toList(),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(
+                    Icons.filter_alt_outlined,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.all(16.0),
+              children: tasks.map((task) {
+                return ListTile(
+                  title: Text(task.title),
+                  subtitle: Text('${task.dueDate} | ${task.status}'),
+                  trailing: PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'edit') {
+                        _editTask(
+                            task); // Mostrar cuadro de diálogo para editar
+                      } else if (value == 'delete') {
+                        _confirmDeleteTask(
+                            task); // Mostrar cuadro de diálogo antes de eliminar
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Text('Editar'),
+                        ),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Eliminar'),
+                        ),
+                      ];
+                    },
+                  ),
+                  onTap: () {
+                    // Navegar a la pantalla de detalles de la tarea
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TaskDetailsScreen(task: task),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
