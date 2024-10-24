@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../components/room_card.dart';  // Import the room card widget
+import '../../components/room_card.dart'; // Import the room card widget
 import '../../components/room_form.dart'; // Import the room form widgets
-import '../../models/room.dart';  // Import the room model
+import '../../models/room.dart'; // Import the room model
 
 class RoomListScreen extends StatefulWidget {
   const RoomListScreen({super.key});
@@ -23,9 +23,10 @@ class RoomListScreenState extends State<RoomListScreen> {
   // Function to update a room in the list
   void _updateRoom(Room updatedRoom) {
     setState(() {
-      final index = rooms.indexWhere((room) => room.number == updatedRoom.number);
+      final index =
+          rooms.indexWhere((room) => room.number == updatedRoom.number);
       if (index != -1) {
-        rooms[index] = updatedRoom;  // Update the room in the list
+        rooms[index] = updatedRoom; // Update the room in the list
       }
     });
   }
@@ -33,14 +34,17 @@ class RoomListScreenState extends State<RoomListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rooms'),
-        centerTitle: true,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            const Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Text(
+                'Rooms',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
@@ -84,10 +88,7 @@ class RoomListScreenState extends State<RoomListScreen> {
                       itemCount: rooms.length,
                       itemBuilder: (context, index) {
                         final room = rooms[index];
-                        return RoomCard(
-                            room: room,
-                            onRoomUpdated: _updateRoom
-                        );
+                        return RoomCard(room: room, onRoomUpdated: _updateRoom);
                       },
                     ),
             ),

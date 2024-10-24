@@ -34,24 +34,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color(0xff73CAFF),
-                Color(0xff1D455E),
-                Color(0xff337EAB),
-              ],
-              stops: [
-                0.0,
-                0.56,
-                1.0,
-              ]),
-        ),
-        child: inventorySection(),
-      ),
+      body: inventorySection(),
     );
   }
 

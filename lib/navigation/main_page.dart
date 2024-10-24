@@ -29,8 +29,10 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Text('InnControl'),
       ),
+      extendBodyBehindAppBar: true,
       drawer: Drawer(
         // Navigation Drawer
         child: ListView(
@@ -75,7 +77,34 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
-      body: _pages[_selectedIndex], // Display the selected view
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Color(0xff73CAFF),
+              Color(0xff1D455E),
+              Color(0xff337EAB),
+            ],
+            stops: [
+              0.0,
+              0.56,
+              1.0,
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 60,
+            ),
+            Expanded(
+              child: _pages[_selectedIndex],
+            ),
+          ],
+        ),
+      ), // Display the selected view
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/task.dart';  // Import the Task model
-import 'add_task_screen.dart';  // Import AddTaskScreen widget
-import 'tasks_details_screen.dart';  // Import TaskDetailsScreen widget
+import '../../models/task.dart'; // Import the Task model
+import 'add_task_screen.dart'; // Import AddTaskScreen widget
+import 'tasks_details_screen.dart'; // Import TaskDetailsScreen widget
 
 class TaskListScreen extends StatefulWidget {
   @override
@@ -34,10 +34,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   // Función para editar una tarea en una ventana emergente
   void _editTask(Task task) {
-    TextEditingController titleController = TextEditingController(text: task.title);
-    TextEditingController dueDateController = TextEditingController(text: task.dueDate);
-    TextEditingController assignedEmployeeController = TextEditingController(text: task.assignedEmployee);
-    TextEditingController statusController = TextEditingController(text: task.status);
+    TextEditingController titleController =
+        TextEditingController(text: task.title);
+    TextEditingController dueDateController =
+        TextEditingController(text: task.dueDate);
+    TextEditingController assignedEmployeeController =
+        TextEditingController(text: task.assignedEmployee);
+    TextEditingController statusController =
+        TextEditingController(text: task.status);
 
     showDialog(
       context: context,
@@ -88,7 +92,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   int taskIndex = tasks.indexOf(task);
                   tasks[taskIndex] = editedTask;
                 });
-                Navigator.of(context).pop(); // Cerrar el cuadro de diálogo después de guardar
+                Navigator.of(context)
+                    .pop(); // Cerrar el cuadro de diálogo después de guardar
               },
             ),
           ],
@@ -104,7 +109,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirmar eliminación'),
-          content: Text('¿Estás seguro de que deseas eliminar la tarea "${task.title}"?'),
+          content: Text(
+              '¿Estás seguro de que deseas eliminar la tarea "${task.title}"?'),
           actions: <Widget>[
             TextButton(
               child: Text('No'),
@@ -116,7 +122,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
               child: Text('Sí'),
               onPressed: () {
                 _deleteTask(task);
-                Navigator.of(context).pop(); // Cerrar el cuadro de diálogo después de eliminar
+                Navigator.of(context)
+                    .pop(); // Cerrar el cuadro de diálogo después de eliminar
               },
             ),
           ],
@@ -137,6 +144,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tasks'),
+        backgroundColor: Colors.transparent,
         actions: [
           IconButton(
             icon: Icon(Icons.filter_alt_outlined),
@@ -169,7 +177,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 if (value == 'edit') {
                   _editTask(task); // Mostrar cuadro de diálogo para editar
                 } else if (value == 'delete') {
-                  _confirmDeleteTask(task);  // Mostrar cuadro de diálogo antes de eliminar
+                  _confirmDeleteTask(
+                      task); // Mostrar cuadro de diálogo antes de eliminar
                 }
               },
               itemBuilder: (BuildContext context) {
