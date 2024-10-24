@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../components/task_item.dart';  // Import TaskItem widget
 import '../../models/task.dart';  // Import the Task model
 import 'add_task_screen.dart';  // Import AddTaskScreen widget
+import 'tasks_details_screen.dart';  // Import TaskDetailsScreen widget
 
 class TaskListScreen extends StatefulWidget {
   @override
@@ -126,6 +127,15 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 ];
               },
             ),
+            onTap: () {
+              // Navegar a la pantalla de detalles de la tarea
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TaskDetailsScreen(task: task),
+                ),
+              );
+            },
           );
         }).toList(),
       ),
