@@ -38,6 +38,34 @@ class _TaskListScreenState extends State<TaskListScreen> {
     print('Editar tarea: ${task.title}');
   }
 
+  // Función para mostrar el cuadro de diálogo de confirmación antes de eliminar
+  void _confirmDeleteTask(Task task) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar eliminación'),
+          content: Text('¿Estás seguro de que deseas eliminar la tarea "${task.title}"?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el cuadro de diálogo
+              },
+            ),
+            TextButton(
+              child: Text('Sí'),
+              onPressed: () {
+                _deleteTask(task);
+                Navigator.of(context).pop(); // Cerrar el cuadro de diálogo después de eliminar
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // Función para eliminar una tarea
   void _deleteTask(Task task) {
     setState(() {
@@ -82,7 +110,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 if (value == 'edit') {
                   _editTask(task);
                 } else if (value == 'delete') {
-                  _deleteTask(task);
+                  _confirmDeleteTask(task);  // Mostrar cuadro de diálogo antes de eliminar
                 }
               },
               itemBuilder: (BuildContext context) {
