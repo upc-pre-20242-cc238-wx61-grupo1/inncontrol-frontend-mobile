@@ -32,6 +32,19 @@ class _TaskListScreenState extends State<TaskListScreen> {
     });
   }
 
+  // Función para editar una tarea
+  void _editTask(Task task) {
+    // Aquí puedes implementar la lógica de edición
+    print('Editar tarea: ${task.title}');
+  }
+
+  // Función para eliminar una tarea
+  void _deleteTask(Task task) {
+    setState(() {
+      tasks.remove(task);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,8 +74,30 @@ class _TaskListScreenState extends State<TaskListScreen> {
       body: ListView(
         padding: EdgeInsets.all(16.0),
         children: tasks.map((task) {
-          return TaskItem(
-            task: task,  // Pasar el objeto Task al widget TaskItem
+          return ListTile(
+            title: Text(task.title),
+            subtitle: Text('${task.dueDate} | ${task.status}'),
+            trailing: PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'edit') {
+                  _editTask(task);
+                } else if (value == 'delete') {
+                  _deleteTask(task);
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    value: 'edit',
+                    child: Text('Editar'),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Text('Eliminar'),
+                  ),
+                ];
+              },
+            ),
           );
         }).toList(),
       ),
