@@ -42,7 +42,17 @@ class RoomListScreenState extends State<RoomListScreen> {
               padding: EdgeInsets.all(15.0),
               child: Text(
                 'Rooms',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 34,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 4,
+                        color: Colors.black26,
+                        offset: Offset(0, 4),
+                      )
+                    ]),
               ),
             ),
             Padding(
@@ -54,6 +64,8 @@ class RoomListScreenState extends State<RoomListScreen> {
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                         hintText: 'Search',
+                        filled: true,
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
@@ -74,8 +86,11 @@ class RoomListScreenState extends State<RoomListScreen> {
                         _addRoom(newRoom);
                       }
                     },
-                    backgroundColor: Colors.blue,
-                    child: const Icon(Icons.add),
+                    backgroundColor: const Color(0xff1D455E),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),
