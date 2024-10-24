@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'navigation/main_page.dart';  // Import the MainPage
+import 'navigation/main_page.dart'; // Import the MainPage
 
 void main() {
   runApp(const MyApp());
@@ -15,9 +15,9 @@ class MyApp extends StatelessWidget {
       title: 'InnControl',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: Colors.transparent,
       ),
-      home: MainPage(),  // Use the RoomsPage as the home
+      home: MainPage(), // Use the RoomsPage as the home
     );
   }
 }
