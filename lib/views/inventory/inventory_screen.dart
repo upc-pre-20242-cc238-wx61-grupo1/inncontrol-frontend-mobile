@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inncontrol/components/add_item_dialog.dart';
+import 'package:inncontrol/components/item_card.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../models/item.dart';
@@ -11,17 +13,44 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
-  final List<ItemModel> itemsData = ItemModel.getItems();
+  List<ItemModel> items = [
+    ItemModel(
+      itemName: 'Shampoo',
+      itemStock: 150,
+      itemDescription:
+          'Su fórmula suave limpia profundamente, dejando el cabello fresco, hidratado y con un aroma agradable que perdura.',
+      graphPath: 'assets/vectors/graph.png',
+    ),
+    ItemModel(
+      itemName: 'Jabón de mano',
+      itemStock: 250,
+      itemDescription:
+          'Jabón con la más alta protección antibacteriana con aroma a aloe vera y frutos rojos.',
+      graphPath: 'assets/vectors/graph.png',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [inventorySection()],
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color(0xff73CAFF),
+                Color(0xff1D455E),
+                Color(0xff337EAB),
+              ],
+              stops: [
+                0.0,
+                0.56,
+                1.0,
+              ]),
         ),
+        child: inventorySection(),
       ),
     );
   }
@@ -32,88 +61,37 @@ class _InventoryScreenState extends State<InventoryScreen> {
       children: [
         mainTitle(),
         inventorySearchBar(),
-        showInventory(),
+        Expanded(
+          child: showInventory(),
+        ),
       ],
     );
   }
 
   ListView showInventory() {
     return ListView.separated(
-      shrinkWrap: true,
+      // shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(horizontal: 28),
+      itemCount: items.length,
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: itemCardContainer(index),
+        return ItemCard(
+          item: items[index],
+          onDelete: () => deleteItem(index),
         );
       },
       separatorBuilder: (context, index) => const SizedBox(height: 22),
-      itemCount: itemsData.length,
-    );
-  }
-
-  Container itemCardContainer(int index) {
-    return Container(
-      decoration: const BoxDecoration(
-        shape: BoxShape.rectangle,
-        // color: Color(0xffEFEFEF),
-        color: Color(0xffEFEFEF),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Text(
-              itemsData[index].itemName,
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              itemsData[index].itemDescription,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(
-              height: 23,
-            ),
-            Row(
-              children: [
-                Text(
-                  'Stock Level: ${itemsData[index].itemStock}',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const Spacer(),
-              ],
-            ),
-            const SizedBox(height: 23),
-            Image.asset(
-              itemsData[index].graphPath,
-              fit: BoxFit.none,
-            ),
-          ],
-        ),
-      ),
     );
   }
 
   Padding inventorySearchBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const SizedBox(
             width: 290,
+            height: 42,
             child: TextField(
               decoration: InputDecoration(
                 filled: true,
@@ -122,11 +100,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   Icons.search,
                   color: Colors.grey,
                   size: 25,
+                  applyTextScaling: true,
                 ),
                 suffixIcon: Icon(Icons.filter_alt_outlined, color: Colors.grey),
                 hintText: 'Search',
                 hintStyle: TextStyle(
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey,
                 ),
@@ -144,12 +123,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              addItemForm();
+              showAddItemDialog(context);
             },
             style: ElevatedButton.styleFrom(
               fixedSize: const Size(42, 42),
               shape: const CircleBorder(),
-              backgroundColor: const Color(0xff337EAB),
+              backgroundColor: const Color(0xff1D455E),
               padding: EdgeInsets.zero,
             ),
             child: const Icon(
@@ -162,184 +141,54 @@ class _InventoryScreenState extends State<InventoryScreen> {
     );
   }
 
-  Row mainTitle() {
-    return const Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(
-            'Inventory',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 34,
-            ),
-          ),
-        ),
-        Spacer()
-      ],
+  Padding mainTitle() {
+    return const Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: Text(
+        'Inventory',
+        style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 34,
+            color: Colors.white,
+            shadows: [
+              Shadow(
+                blurRadius: 4,
+                color: Colors.black26,
+                offset: Offset(0, 4),
+              )
+            ]),
+      ),
     );
   }
 
-  Future addItemForm() => showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Add Inventory item'),
-      content: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 149,
-            child: TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Item Title',
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 0.8),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 354,
-            child: TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Description...',
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 0.8),
-                ),
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 140,
-                child: TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: 'Provider',
-                    hintStyle: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(width: 0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                      BorderSide(color: Colors.grey, width: 0.8),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 140,
-                child: TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: 'Provider Contact',
-                    hintStyle: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(width: 0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                      BorderSide(color: Colors.grey, width: 0.8),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            width: 354,
-            child: TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Provider desc.',
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(width: 0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 0.8),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 155,
-            child: TextField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                suffixIcon: Icon(Icons.arrow_drop_down),
-                hintText: 'QUantity',
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 0,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                    width: 0.8,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            createItem();
+  Future showAddItemDialog(BuildContext context) {
+    return showDialog(
+      barrierColor: Colors.black.withOpacity(0.8),
+      context: context,
+      builder: (context) {
+        return AddItemDialog(
+          onItemAdded: (title, description, quantity) {
+            createItem(title, description, quantity);
           },
-          child: const Text('Add item'),
-        )
-      ],
-    ),
-  );
+        );
+      },
+    );
+  }
 
-  void createItem() {
-    Navigator.of(context).pop();
+  void createItem(String name, String description, String stock) {
+    setState(() {
+      items.add(ItemModel(
+        itemName: name,
+        itemStock: int.parse(stock),
+        itemDescription: description,
+        graphPath: 'assets/vectors/graph.png',
+      ));
+    });
+  }
+
+  void deleteItem(int index) {
+    setState(() {
+      items.removeAt(index);
+    });
   }
 }
